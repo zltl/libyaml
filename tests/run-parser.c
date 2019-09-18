@@ -1,16 +1,14 @@
 #include <yaml.h>
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifdef NDEBUG
 #undef NDEBUG
 #endif
 #include <assert.h>
 
-int
-main(int argc, char *argv[])
-{
+int main(int argc, char* argv[]) {
     int number;
 
     if (argc < 2) {
@@ -18,9 +16,8 @@ main(int argc, char *argv[])
         return 0;
     }
 
-    for (number = 1; number < argc; number ++)
-    {
-        FILE *file;
+    for (number = 1; number < argc; number++) {
+        FILE* file;
         yaml_parser_t parser;
         yaml_event_t event;
         int done = 0;
@@ -37,8 +34,7 @@ main(int argc, char *argv[])
 
         yaml_parser_set_input_file(&parser, file);
 
-        while (!done)
-        {
+        while (!done) {
             if (!yaml_parser_parse(&parser, &event)) {
                 error = 1;
                 break;
@@ -48,7 +44,7 @@ main(int argc, char *argv[])
 
             yaml_event_delete(&event);
 
-            count ++;
+            count++;
         }
 
         yaml_parser_delete(&parser);
@@ -60,4 +56,3 @@ main(int argc, char *argv[])
 
     return 0;
 }
-

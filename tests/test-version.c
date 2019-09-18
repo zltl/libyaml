@@ -1,16 +1,14 @@
 #include <yaml.h>
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifdef NDEBUG
 #undef NDEBUG
 #endif
 #include <assert.h>
 
-int
-main(void)
-{
+int main(void) {
     int major = -1;
     int minor = -1;
     int patch = -1;

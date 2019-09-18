@@ -1,7 +1,7 @@
 /**
  * @file yaml.h
  * @brief Public interface for libyaml.
- * 
+ *
  * Include the header file with the code:
  * @code
  * #include <yaml.h>
@@ -15,8 +15,8 @@
 extern "C" {
 #endif
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /**
@@ -27,17 +27,17 @@ extern "C" {
 /** The public API declaration. */
 
 #if defined(__MINGW32__)
-#   define  YAML_DECLARE(type)  type
+#define YAML_DECLARE(type) type
 #elif defined(WIN32)
-#   if defined(YAML_DECLARE_STATIC)
-#       define  YAML_DECLARE(type)  type
-#   elif defined(YAML_DECLARE_EXPORT)
-#       define  YAML_DECLARE(type)  __declspec(dllexport) type
-#   else
-#       define  YAML_DECLARE(type)  __declspec(dllimport) type
-#   endif
+#if defined(YAML_DECLARE_STATIC)
+#define YAML_DECLARE(type) type
+#elif defined(YAML_DECLARE_EXPORT)
+#define YAML_DECLARE(type) __declspec(dllexport) type
 #else
-#   define  YAML_DECLARE(type)  type
+#define YAML_DECLARE(type) __declspec(dllimport) type
+#endif
+#else
+#define YAML_DECLARE(type) type
 #endif
 
 /** @} */
@@ -55,7 +55,7 @@ extern "C" {
  * number, and @c Z is the patch version number.
  */
 
-YAML_DECLARE(const char *)
+YAML_DECLARE(const char*)
 yaml_get_version_string(void);
 
 /**
@@ -67,7 +67,7 @@ yaml_get_version_string(void);
  */
 
 YAML_DECLARE(void)
-yaml_get_version(int *major, int *minor, int *patch);
+yaml_get_version(int* major, int* minor, int* patch);
 
 /** @} */
 
@@ -90,9 +90,9 @@ typedef struct yaml_version_directive_s {
 /** The tag directive data. */
 typedef struct yaml_tag_directive_s {
     /** The tag handle. */
-    yaml_char_t *handle;
+    yaml_char_t* handle;
     /** The tag prefix. */
-    yaml_char_t *prefix;
+    yaml_char_t* prefix;
 } yaml_tag_directive_t;
 
 /** The stream encoding. */
@@ -201,7 +201,7 @@ typedef enum yaml_mapping_style_e {
     YAML_BLOCK_MAPPING_STYLE,
     /** The flow mapping style. */
     YAML_FLOW_MAPPING_STYLE
-/*    YAML_FLOW_SET_MAPPING_STYLE   */
+    /*    YAML_FLOW_SET_MAPPING_STYLE   */
 } yaml_mapping_style_t;
 
 /** @} */
@@ -267,13 +267,11 @@ typedef enum yaml_token_type_e {
 
 /** The token structure. */
 typedef struct yaml_token_s {
-
     /** The token type. */
     yaml_token_type_t type;
 
     /** The token data. */
     union {
-
         /** The stream start (for @c YAML_STREAM_START_TOKEN). */
         struct {
             /** The stream encoding. */
@@ -283,27 +281,27 @@ typedef struct yaml_token_s {
         /** The alias (for @c YAML_ALIAS_TOKEN). */
         struct {
             /** The alias value. */
-            yaml_char_t *value;
+            yaml_char_t* value;
         } alias;
 
         /** The anchor (for @c YAML_ANCHOR_TOKEN). */
         struct {
             /** The anchor value. */
-            yaml_char_t *value;
+            yaml_char_t* value;
         } anchor;
 
         /** The tag (for @c YAML_TAG_TOKEN). */
         struct {
             /** The tag handle. */
-            yaml_char_t *handle;
+            yaml_char_t* handle;
             /** The tag suffix. */
-            yaml_char_t *suffix;
+            yaml_char_t* suffix;
         } tag;
 
         /** The scalar value (for @c YAML_SCALAR_TOKEN). */
         struct {
             /** The scalar value. */
-            yaml_char_t *value;
+            yaml_char_t* value;
             /** The length of the scalar value. */
             size_t length;
             /** The scalar style. */
@@ -321,9 +319,9 @@ typedef struct yaml_token_s {
         /** The tag directive (for @c YAML_TAG_DIRECTIVE_TOKEN). */
         struct {
             /** The tag handle. */
-            yaml_char_t *handle;
+            yaml_char_t* handle;
             /** The tag prefix. */
-            yaml_char_t *prefix;
+            yaml_char_t* prefix;
         } tag_directive;
 
     } data;
@@ -342,7 +340,7 @@ typedef struct yaml_token_s {
  */
 
 YAML_DECLARE(void)
-yaml_token_delete(yaml_token_t *token);
+yaml_token_delete(yaml_token_t* token);
 
 /** @} */
 
@@ -384,13 +382,11 @@ typedef enum yaml_event_type_e {
 
 /** The event structure. */
 typedef struct yaml_event_s {
-
     /** The event type. */
     yaml_event_type_t type;
 
     /** The event data. */
     union {
-        
         /** The stream parameters (for @c YAML_STREAM_START_EVENT). */
         struct {
             /** The document encoding. */
@@ -400,14 +396,14 @@ typedef struct yaml_event_s {
         /** The document parameters (for @c YAML_DOCUMENT_START_EVENT). */
         struct {
             /** The version directive. */
-            yaml_version_directive_t *version_directive;
+            yaml_version_directive_t* version_directive;
 
             /** The list of tag directives. */
             struct {
                 /** The beginning of the tag directives list. */
-                yaml_tag_directive_t *start;
+                yaml_tag_directive_t* start;
                 /** The end of the tag directives list. */
-                yaml_tag_directive_t *end;
+                yaml_tag_directive_t* end;
             } tag_directives;
 
             /** Is the document indicator implicit? */
@@ -423,17 +419,17 @@ typedef struct yaml_event_s {
         /** The alias parameters (for @c YAML_ALIAS_EVENT). */
         struct {
             /** The anchor. */
-            yaml_char_t *anchor;
+            yaml_char_t* anchor;
         } alias;
 
         /** The scalar parameters (for @c YAML_SCALAR_EVENT). */
         struct {
             /** The anchor. */
-            yaml_char_t *anchor;
+            yaml_char_t* anchor;
             /** The tag. */
-            yaml_char_t *tag;
+            yaml_char_t* tag;
             /** The scalar value. */
-            yaml_char_t *value;
+            yaml_char_t* value;
             /** The length of the scalar value. */
             size_t length;
             /** Is the tag optional for the plain style? */
@@ -447,9 +443,9 @@ typedef struct yaml_event_s {
         /** The sequence parameters (for @c YAML_SEQUENCE_START_EVENT). */
         struct {
             /** The anchor. */
-            yaml_char_t *anchor;
+            yaml_char_t* anchor;
             /** The tag. */
-            yaml_char_t *tag;
+            yaml_char_t* tag;
             /** Is the tag optional? */
             int implicit;
             /** The sequence style. */
@@ -459,9 +455,9 @@ typedef struct yaml_event_s {
         /** The mapping parameters (for @c YAML_MAPPING_START_EVENT). */
         struct {
             /** The anchor. */
-            yaml_char_t *anchor;
+            yaml_char_t* anchor;
             /** The tag. */
-            yaml_char_t *tag;
+            yaml_char_t* tag;
             /** Is the tag optional? */
             int implicit;
             /** The mapping style. */
@@ -487,8 +483,8 @@ typedef struct yaml_event_s {
  */
 
 YAML_DECLARE(int)
-yaml_stream_start_event_initialize(yaml_event_t *event,
-        yaml_encoding_t encoding);
+yaml_stream_start_event_initialize(yaml_event_t* event,
+                                   yaml_encoding_t encoding);
 
 /**
  * Create the STREAM-END event.
@@ -499,7 +495,7 @@ yaml_stream_start_event_initialize(yaml_event_t *event,
  */
 
 YAML_DECLARE(int)
-yaml_stream_end_event_initialize(yaml_event_t *event);
+yaml_stream_end_event_initialize(yaml_event_t* event);
 
 /**
  * Create the DOCUMENT-START event.
@@ -521,11 +517,10 @@ yaml_stream_end_event_initialize(yaml_event_t *event);
  */
 
 YAML_DECLARE(int)
-yaml_document_start_event_initialize(yaml_event_t *event,
-        yaml_version_directive_t *version_directive,
-        yaml_tag_directive_t *tag_directives_start,
-        yaml_tag_directive_t *tag_directives_end,
-        int implicit);
+yaml_document_start_event_initialize(
+    yaml_event_t* event, yaml_version_directive_t* version_directive,
+    yaml_tag_directive_t* tag_directives_start,
+    yaml_tag_directive_t* tag_directives_end, int implicit);
 
 /**
  * Create the DOCUMENT-END event.
@@ -540,7 +535,7 @@ yaml_document_start_event_initialize(yaml_event_t *event,
  */
 
 YAML_DECLARE(int)
-yaml_document_end_event_initialize(yaml_event_t *event, int implicit);
+yaml_document_end_event_initialize(yaml_event_t* event, int implicit);
 
 /**
  * Create an ALIAS event.
@@ -552,7 +547,7 @@ yaml_document_end_event_initialize(yaml_event_t *event, int implicit);
  */
 
 YAML_DECLARE(int)
-yaml_alias_event_initialize(yaml_event_t *event, const yaml_char_t *anchor);
+yaml_alias_event_initialize(yaml_event_t* event, const yaml_char_t* anchor);
 
 /**
  * Create a SCALAR event.
@@ -577,11 +572,10 @@ yaml_alias_event_initialize(yaml_event_t *event, const yaml_char_t *anchor);
  */
 
 YAML_DECLARE(int)
-yaml_scalar_event_initialize(yaml_event_t *event,
-        const yaml_char_t *anchor, const yaml_char_t *tag,
-        const yaml_char_t *value, int length,
-        int plain_implicit, int quoted_implicit,
-        yaml_scalar_style_t style);
+yaml_scalar_event_initialize(yaml_event_t* event, const yaml_char_t* anchor,
+                             const yaml_char_t* tag, const yaml_char_t* value,
+                             int length, int plain_implicit,
+                             int quoted_implicit, yaml_scalar_style_t style);
 
 /**
  * Create a SEQUENCE-START event.
@@ -600,9 +594,10 @@ yaml_scalar_event_initialize(yaml_event_t *event,
  */
 
 YAML_DECLARE(int)
-yaml_sequence_start_event_initialize(yaml_event_t *event,
-        const yaml_char_t *anchor, const yaml_char_t *tag, int implicit,
-        yaml_sequence_style_t style);
+yaml_sequence_start_event_initialize(yaml_event_t* event,
+                                     const yaml_char_t* anchor,
+                                     const yaml_char_t* tag, int implicit,
+                                     yaml_sequence_style_t style);
 
 /**
  * Create a SEQUENCE-END event.
@@ -613,7 +608,7 @@ yaml_sequence_start_event_initialize(yaml_event_t *event,
  */
 
 YAML_DECLARE(int)
-yaml_sequence_end_event_initialize(yaml_event_t *event);
+yaml_sequence_end_event_initialize(yaml_event_t* event);
 
 /**
  * Create a MAPPING-START event.
@@ -632,9 +627,10 @@ yaml_sequence_end_event_initialize(yaml_event_t *event);
  */
 
 YAML_DECLARE(int)
-yaml_mapping_start_event_initialize(yaml_event_t *event,
-        const yaml_char_t *anchor, const yaml_char_t *tag, int implicit,
-        yaml_mapping_style_t style);
+yaml_mapping_start_event_initialize(yaml_event_t* event,
+                                    const yaml_char_t* anchor,
+                                    const yaml_char_t* tag, int implicit,
+                                    yaml_mapping_style_t style);
 
 /**
  * Create a MAPPING-END event.
@@ -645,7 +641,7 @@ yaml_mapping_start_event_initialize(yaml_event_t *event,
  */
 
 YAML_DECLARE(int)
-yaml_mapping_end_event_initialize(yaml_event_t *event);
+yaml_mapping_end_event_initialize(yaml_event_t* event);
 
 /**
  * Free any memory allocated for an event object.
@@ -654,7 +650,7 @@ yaml_mapping_end_event_initialize(yaml_event_t *event);
  */
 
 YAML_DECLARE(void)
-yaml_event_delete(yaml_event_t *event);
+yaml_event_delete(yaml_event_t* event);
 
 /** @} */
 
@@ -664,29 +660,29 @@ yaml_event_delete(yaml_event_t *event);
  */
 
 /** The tag @c !!null with the only possible value: @c null. */
-#define YAML_NULL_TAG       "tag:yaml.org,2002:null"
+#define YAML_NULL_TAG "tag:yaml.org,2002:null"
 /** The tag @c !!bool with the values: @c true and @c false. */
-#define YAML_BOOL_TAG       "tag:yaml.org,2002:bool"
+#define YAML_BOOL_TAG "tag:yaml.org,2002:bool"
 /** The tag @c !!str for string values. */
-#define YAML_STR_TAG        "tag:yaml.org,2002:str"
+#define YAML_STR_TAG "tag:yaml.org,2002:str"
 /** The tag @c !!int for integer values. */
-#define YAML_INT_TAG        "tag:yaml.org,2002:int"
+#define YAML_INT_TAG "tag:yaml.org,2002:int"
 /** The tag @c !!float for float values. */
-#define YAML_FLOAT_TAG      "tag:yaml.org,2002:float"
+#define YAML_FLOAT_TAG "tag:yaml.org,2002:float"
 /** The tag @c !!timestamp for date and time values. */
-#define YAML_TIMESTAMP_TAG  "tag:yaml.org,2002:timestamp"
+#define YAML_TIMESTAMP_TAG "tag:yaml.org,2002:timestamp"
 
 /** The tag @c !!seq is used to denote sequences. */
-#define YAML_SEQ_TAG        "tag:yaml.org,2002:seq"
+#define YAML_SEQ_TAG "tag:yaml.org,2002:seq"
 /** The tag @c !!map is used to denote mapping. */
-#define YAML_MAP_TAG        "tag:yaml.org,2002:map"
+#define YAML_MAP_TAG "tag:yaml.org,2002:map"
 
 /** The default scalar tag is @c !!str. */
-#define YAML_DEFAULT_SCALAR_TAG     YAML_STR_TAG
+#define YAML_DEFAULT_SCALAR_TAG YAML_STR_TAG
 /** The default sequence tag is @c !!seq. */
-#define YAML_DEFAULT_SEQUENCE_TAG   YAML_SEQ_TAG
+#define YAML_DEFAULT_SEQUENCE_TAG YAML_SEQ_TAG
 /** The default mapping tag is @c !!map. */
-#define YAML_DEFAULT_MAPPING_TAG    YAML_MAP_TAG
+#define YAML_DEFAULT_MAPPING_TAG YAML_MAP_TAG
 
 /** Node types. */
 typedef enum yaml_node_type_e {
@@ -717,20 +713,18 @@ typedef struct yaml_node_pair_s {
 
 /** The node structure. */
 struct yaml_node_s {
-
     /** The node type. */
     yaml_node_type_t type;
 
     /** The node tag. */
-    yaml_char_t *tag;
+    yaml_char_t* tag;
 
     /** The node data. */
     union {
-        
         /** The scalar parameters (for @c YAML_SCALAR_NODE). */
         struct {
             /** The scalar value. */
-            yaml_char_t *value;
+            yaml_char_t* value;
             /** The length of the scalar value. */
             size_t length;
             /** The scalar style. */
@@ -742,11 +736,11 @@ struct yaml_node_s {
             /** The stack of sequence items. */
             struct {
                 /** The beginning of the stack. */
-                yaml_node_item_t *start;
+                yaml_node_item_t* start;
                 /** The end of the stack. */
-                yaml_node_item_t *end;
+                yaml_node_item_t* end;
                 /** The top of the stack. */
-                yaml_node_item_t *top;
+                yaml_node_item_t* top;
             } items;
             /** The sequence style. */
             yaml_sequence_style_t style;
@@ -757,11 +751,11 @@ struct yaml_node_s {
             /** The stack of mapping pairs (key, value). */
             struct {
                 /** The beginning of the stack. */
-                yaml_node_pair_t *start;
+                yaml_node_pair_t* start;
                 /** The end of the stack. */
-                yaml_node_pair_t *end;
+                yaml_node_pair_t* end;
                 /** The top of the stack. */
-                yaml_node_pair_t *top;
+                yaml_node_pair_t* top;
             } pairs;
             /** The mapping style. */
             yaml_mapping_style_t style;
@@ -773,31 +767,29 @@ struct yaml_node_s {
     yaml_mark_t start_mark;
     /** The end of the node. */
     yaml_mark_t end_mark;
-
 };
 
 /** The document structure. */
 typedef struct yaml_document_s {
-
     /** The document nodes. */
     struct {
         /** The beginning of the stack. */
-        yaml_node_t *start;
+        yaml_node_t* start;
         /** The end of the stack. */
-        yaml_node_t *end;
+        yaml_node_t* end;
         /** The top of the stack. */
-        yaml_node_t *top;
+        yaml_node_t* top;
     } nodes;
 
     /** The version directive. */
-    yaml_version_directive_t *version_directive;
+    yaml_version_directive_t* version_directive;
 
     /** The list of tag directives. */
     struct {
         /** The beginning of the tag directives list. */
-        yaml_tag_directive_t *start;
+        yaml_tag_directive_t* start;
         /** The end of the tag directives list. */
-        yaml_tag_directive_t *end;
+        yaml_tag_directive_t* end;
     } tag_directives;
 
     /** Is the document start indicator implicit? */
@@ -831,11 +823,11 @@ typedef struct yaml_document_s {
  */
 
 YAML_DECLARE(int)
-yaml_document_initialize(yaml_document_t *document,
-        yaml_version_directive_t *version_directive,
-        yaml_tag_directive_t *tag_directives_start,
-        yaml_tag_directive_t *tag_directives_end,
-        int start_implicit, int end_implicit);
+yaml_document_initialize(yaml_document_t* document,
+                         yaml_version_directive_t* version_directive,
+                         yaml_tag_directive_t* tag_directives_start,
+                         yaml_tag_directive_t* tag_directives_end,
+                         int start_implicit, int end_implicit);
 
 /**
  * Delete a YAML document and all its nodes.
@@ -844,7 +836,7 @@ yaml_document_initialize(yaml_document_t *document,
  */
 
 YAML_DECLARE(void)
-yaml_document_delete(yaml_document_t *document);
+yaml_document_delete(yaml_document_t* document);
 
 /**
  * Get a node of a YAML document.
@@ -858,8 +850,8 @@ yaml_document_delete(yaml_document_t *document);
  * @returns the node objct or @c NULL if @c node_id is out of range.
  */
 
-YAML_DECLARE(yaml_node_t *)
-yaml_document_get_node(yaml_document_t *document, int index);
+YAML_DECLARE(yaml_node_t*)
+yaml_document_get_node(yaml_document_t* document, int index);
 
 /**
  * Get the root of a YAML document node.
@@ -877,8 +869,8 @@ yaml_document_get_node(yaml_document_t *document, int index);
  * @returns the node object or @c NULL if the document is empty.
  */
 
-YAML_DECLARE(yaml_node_t *)
-yaml_document_get_root_node(yaml_document_t *document);
+YAML_DECLARE(yaml_node_t*)
+yaml_document_get_root_node(yaml_document_t* document);
 
 /**
  * Create a SCALAR node and attach it to the document.
@@ -895,9 +887,9 @@ yaml_document_get_root_node(yaml_document_t *document);
  */
 
 YAML_DECLARE(int)
-yaml_document_add_scalar(yaml_document_t *document,
-        const yaml_char_t *tag, const yaml_char_t *value, int length,
-        yaml_scalar_style_t style);
+yaml_document_add_scalar(yaml_document_t* document, const yaml_char_t* tag,
+                         const yaml_char_t* value, int length,
+                         yaml_scalar_style_t style);
 
 /**
  * Create a SEQUENCE node and attach it to the document.
@@ -912,8 +904,8 @@ yaml_document_add_scalar(yaml_document_t *document,
  */
 
 YAML_DECLARE(int)
-yaml_document_add_sequence(yaml_document_t *document,
-        const yaml_char_t *tag, yaml_sequence_style_t style);
+yaml_document_add_sequence(yaml_document_t* document, const yaml_char_t* tag,
+                           yaml_sequence_style_t style);
 
 /**
  * Create a MAPPING node and attach it to the document.
@@ -928,8 +920,8 @@ yaml_document_add_sequence(yaml_document_t *document,
  */
 
 YAML_DECLARE(int)
-yaml_document_add_mapping(yaml_document_t *document,
-        const yaml_char_t *tag, yaml_mapping_style_t style);
+yaml_document_add_mapping(yaml_document_t* document, const yaml_char_t* tag,
+                          yaml_mapping_style_t style);
 
 /**
  * Add an item to a SEQUENCE node.
@@ -937,13 +929,13 @@ yaml_document_add_mapping(yaml_document_t *document,
  * @param[in,out]   document    A document object.
  * @param[in]       sequence    The sequence node id.
  * @param[in]       item        The item node id.
-*
+ *
  * @returns @c 1 if the function succeeded, @c 0 on error.
  */
 
 YAML_DECLARE(int)
-yaml_document_append_sequence_item(yaml_document_t *document,
-        int sequence, int item);
+yaml_document_append_sequence_item(yaml_document_t* document, int sequence,
+                                   int item);
 
 /**
  * Add a pair of a key and a value to a MAPPING node.
@@ -952,13 +944,13 @@ yaml_document_append_sequence_item(yaml_document_t *document,
  * @param[in]       mapping     The mapping node id.
  * @param[in]       key         The key node id.
  * @param[in]       value       The value node id.
-*
+ *
  * @returns @c 1 if the function succeeded, @c 0 on error.
  */
 
 YAML_DECLARE(int)
-yaml_document_append_mapping_pair(yaml_document_t *document,
-        int mapping, int key, int value);
+yaml_document_append_mapping_pair(yaml_document_t* document, int mapping,
+                                  int key, int value);
 
 /** @} */
 
@@ -985,8 +977,8 @@ yaml_document_append_mapping_pair(yaml_document_t *document,
  * @a size_read to @c 0 and return @c 1.
  */
 
-typedef int yaml_read_handler_t(void *data, unsigned char *buffer, size_t size,
-        size_t *size_read);
+typedef int yaml_read_handler_t(void* data, unsigned char* buffer, size_t size,
+                                size_t* size_read);
 
 /**
  * This structure holds information about a potential simple key.
@@ -1066,7 +1058,7 @@ typedef enum yaml_parser_state_e {
 
 typedef struct yaml_alias_data_s {
     /** The anchor. */
-    yaml_char_t *anchor;
+    yaml_char_t* anchor;
     /** The node id. */
     int index;
     /** The anchor mark. */
@@ -1081,7 +1073,6 @@ typedef struct yaml_alias_data_s {
  */
 
 typedef struct yaml_parser_s {
-
     /**
      * @name Error handling
      * @{
@@ -1090,7 +1081,7 @@ typedef struct yaml_parser_s {
     /** Error type. */
     yaml_error_type_t error;
     /** Error description. */
-    const char *problem;
+    const char* problem;
     /** The byte about which the problem occured. */
     size_t problem_offset;
     /** The problematic value (@c -1 is none). */
@@ -1098,7 +1089,7 @@ typedef struct yaml_parser_s {
     /** The problem position. */
     yaml_mark_t problem_mark;
     /** The error context. */
-    const char *context;
+    const char* context;
     /** The context position. */
     yaml_mark_t context_mark;
 
@@ -1112,25 +1103,25 @@ typedef struct yaml_parser_s {
      */
 
     /** Read handler. */
-    yaml_read_handler_t *read_handler;
+    yaml_read_handler_t* read_handler;
 
     /** A pointer for passing to the read handler. */
-    void *read_handler_data;
+    void* read_handler_data;
 
     /** Standard (string or file) input data. */
     union {
         /** String input data. */
         struct {
             /** The string start pointer. */
-            const unsigned char *start;
+            const unsigned char* start;
             /** The string end pointer. */
-            const unsigned char *end;
+            const unsigned char* end;
             /** The string current position. */
-            const unsigned char *current;
+            const unsigned char* current;
         } string;
 
         /** File input data. */
-        FILE *file;
+        FILE* file;
     } input;
 
     /** EOF flag */
@@ -1139,13 +1130,13 @@ typedef struct yaml_parser_s {
     /** The working buffer. */
     struct {
         /** The beginning of the buffer. */
-        yaml_char_t *start;
+        yaml_char_t* start;
         /** The end of the buffer. */
-        yaml_char_t *end;
+        yaml_char_t* end;
         /** The current position of the buffer. */
-        yaml_char_t *pointer;
+        yaml_char_t* pointer;
         /** The last filled position of the buffer. */
-        yaml_char_t *last;
+        yaml_char_t* last;
     } buffer;
 
     /* The number of unread characters in the buffer. */
@@ -1154,13 +1145,13 @@ typedef struct yaml_parser_s {
     /** The raw buffer. */
     struct {
         /** The beginning of the buffer. */
-        unsigned char *start;
+        unsigned char* start;
         /** The end of the buffer. */
-        unsigned char *end;
+        unsigned char* end;
         /** The current position of the buffer. */
-        unsigned char *pointer;
+        unsigned char* pointer;
         /** The last filled position of the buffer. */
-        unsigned char *last;
+        unsigned char* last;
     } raw_buffer;
 
     /** The input encoding. */
@@ -1193,13 +1184,13 @@ typedef struct yaml_parser_s {
     /** The tokens queue. */
     struct {
         /** The beginning of the tokens queue. */
-        yaml_token_t *start;
+        yaml_token_t* start;
         /** The end of the tokens queue. */
-        yaml_token_t *end;
+        yaml_token_t* end;
         /** The head of the tokens queue. */
-        yaml_token_t *head;
+        yaml_token_t* head;
         /** The tail of the tokens queue. */
-        yaml_token_t *tail;
+        yaml_token_t* tail;
     } tokens;
 
     /** The number of tokens fetched from the queue. */
@@ -1211,11 +1202,11 @@ typedef struct yaml_parser_s {
     /** The indentation levels stack. */
     struct {
         /** The beginning of the stack. */
-        int *start;
+        int* start;
         /** The end of the stack. */
-        int *end;
+        int* end;
         /** The top of the stack. */
-        int *top;
+        int* top;
     } indents;
 
     /** The current indentation level. */
@@ -1227,11 +1218,11 @@ typedef struct yaml_parser_s {
     /** The stack of simple keys. */
     struct {
         /** The beginning of the stack. */
-        yaml_simple_key_t *start;
+        yaml_simple_key_t* start;
         /** The end of the stack. */
-        yaml_simple_key_t *end;
+        yaml_simple_key_t* end;
         /** The top of the stack. */
-        yaml_simple_key_t *top;
+        yaml_simple_key_t* top;
     } simple_keys;
 
     /**
@@ -1246,11 +1237,11 @@ typedef struct yaml_parser_s {
     /** The parser states stack. */
     struct {
         /** The beginning of the stack. */
-        yaml_parser_state_t *start;
+        yaml_parser_state_t* start;
         /** The end of the stack. */
-        yaml_parser_state_t *end;
+        yaml_parser_state_t* end;
         /** The top of the stack. */
-        yaml_parser_state_t *top;
+        yaml_parser_state_t* top;
     } states;
 
     /** The current parser state. */
@@ -1259,21 +1250,21 @@ typedef struct yaml_parser_s {
     /** The stack of marks. */
     struct {
         /** The beginning of the stack. */
-        yaml_mark_t *start;
+        yaml_mark_t* start;
         /** The end of the stack. */
-        yaml_mark_t *end;
+        yaml_mark_t* end;
         /** The top of the stack. */
-        yaml_mark_t *top;
+        yaml_mark_t* top;
     } marks;
 
     /** The list of TAG directives. */
     struct {
         /** The beginning of the list. */
-        yaml_tag_directive_t *start;
+        yaml_tag_directive_t* start;
         /** The end of the list. */
-        yaml_tag_directive_t *end;
+        yaml_tag_directive_t* end;
         /** The top of the list. */
-        yaml_tag_directive_t *top;
+        yaml_tag_directive_t* top;
     } tag_directives;
 
     /**
@@ -1288,15 +1279,15 @@ typedef struct yaml_parser_s {
     /** The alias data. */
     struct {
         /** The beginning of the list. */
-        yaml_alias_data_t *start;
+        yaml_alias_data_t* start;
         /** The end of the list. */
-        yaml_alias_data_t *end;
+        yaml_alias_data_t* end;
         /** The top of the list. */
-        yaml_alias_data_t *top;
+        yaml_alias_data_t* top;
     } aliases;
 
     /** The currently parsed document. */
-    yaml_document_t *document;
+    yaml_document_t* document;
 
     /**
      * @}
@@ -1316,7 +1307,7 @@ typedef struct yaml_parser_s {
  */
 
 YAML_DECLARE(int)
-yaml_parser_initialize(yaml_parser_t *parser);
+yaml_parser_initialize(yaml_parser_t* parser);
 
 /**
  * Destroy a parser.
@@ -1325,7 +1316,7 @@ yaml_parser_initialize(yaml_parser_t *parser);
  */
 
 YAML_DECLARE(void)
-yaml_parser_delete(yaml_parser_t *parser);
+yaml_parser_delete(yaml_parser_t* parser);
 
 /**
  * Set a string input.
@@ -1340,8 +1331,8 @@ yaml_parser_delete(yaml_parser_t *parser);
  */
 
 YAML_DECLARE(void)
-yaml_parser_set_input_string(yaml_parser_t *parser,
-        const unsigned char *input, size_t size);
+yaml_parser_set_input_string(yaml_parser_t* parser, const unsigned char* input,
+                             size_t size);
 
 /**
  * Set a file input.
@@ -1354,7 +1345,7 @@ yaml_parser_set_input_string(yaml_parser_t *parser,
  */
 
 YAML_DECLARE(void)
-yaml_parser_set_input_file(yaml_parser_t *parser, FILE *file);
+yaml_parser_set_input_file(yaml_parser_t* parser, FILE* file);
 
 /**
  * Set a generic input handler.
@@ -1366,8 +1357,8 @@ yaml_parser_set_input_file(yaml_parser_t *parser, FILE *file);
  */
 
 YAML_DECLARE(void)
-yaml_parser_set_input(yaml_parser_t *parser,
-        yaml_read_handler_t *handler, void *data);
+yaml_parser_set_input(yaml_parser_t* parser, yaml_read_handler_t* handler,
+                      void* data);
 
 /**
  * Set the source encoding.
@@ -1377,7 +1368,7 @@ yaml_parser_set_input(yaml_parser_t *parser,
  */
 
 YAML_DECLARE(void)
-yaml_parser_set_encoding(yaml_parser_t *parser, yaml_encoding_t encoding);
+yaml_parser_set_encoding(yaml_parser_t* parser, yaml_encoding_t encoding);
 
 /**
  * Scan the input stream and produce the next token.
@@ -1401,7 +1392,7 @@ yaml_parser_set_encoding(yaml_parser_t *parser, yaml_encoding_t encoding);
  */
 
 YAML_DECLARE(int)
-yaml_parser_scan(yaml_parser_t *parser, yaml_token_t *token);
+yaml_parser_scan(yaml_parser_t* parser, yaml_token_t* token);
 
 /**
  * Parse the input stream and produce the next parsing event.
@@ -1425,7 +1416,7 @@ yaml_parser_scan(yaml_parser_t *parser, yaml_token_t *token);
  */
 
 YAML_DECLARE(int)
-yaml_parser_parse(yaml_parser_t *parser, yaml_event_t *event);
+yaml_parser_parse(yaml_parser_t* parser, yaml_event_t* event);
 
 /**
  * Parse the input stream and produce the next YAML document.
@@ -1450,7 +1441,7 @@ yaml_parser_parse(yaml_parser_t *parser, yaml_event_t *event);
  */
 
 YAML_DECLARE(int)
-yaml_parser_load(yaml_parser_t *parser, yaml_document_t *document);
+yaml_parser_load(yaml_parser_t* parser, yaml_document_t* document);
 
 /** @} */
 
@@ -1475,7 +1466,8 @@ yaml_parser_load(yaml_parser_t *parser, yaml_document_t *document);
  * the returned value should be @c 0.
  */
 
-typedef int yaml_write_handler_t(void *data, unsigned char *buffer, size_t size);
+typedef int yaml_write_handler_t(void* data, unsigned char* buffer,
+                                 size_t size);
 
 /** The emitter states. */
 typedef enum yaml_emitter_state_e {
@@ -1517,7 +1509,6 @@ typedef enum yaml_emitter_state_e {
     YAML_EMIT_END_STATE
 } yaml_emitter_state_t;
 
-
 /* This is needed for C++ */
 
 typedef struct yaml_anchors_s {
@@ -1537,7 +1528,6 @@ typedef struct yaml_anchors_s {
  */
 
 typedef struct yaml_emitter_s {
-
     /**
      * @name Error handling
      * @{
@@ -1546,7 +1536,7 @@ typedef struct yaml_emitter_s {
     /** Error type. */
     yaml_error_type_t error;
     /** Error description. */
-    const char *problem;
+    const char* problem;
 
     /**
      * @}
@@ -1558,49 +1548,49 @@ typedef struct yaml_emitter_s {
      */
 
     /** Write handler. */
-    yaml_write_handler_t *write_handler;
+    yaml_write_handler_t* write_handler;
 
     /** A pointer for passing to the white handler. */
-    void *write_handler_data;
+    void* write_handler_data;
 
     /** Standard (string or file) output data. */
     union {
         /** String output data. */
         struct {
             /** The buffer pointer. */
-            unsigned char *buffer;
+            unsigned char* buffer;
             /** The buffer size. */
             size_t size;
             /** The number of written bytes. */
-            size_t *size_written;
+            size_t* size_written;
         } string;
 
         /** File output data. */
-        FILE *file;
+        FILE* file;
     } output;
 
     /** The working buffer. */
     struct {
         /** The beginning of the buffer. */
-        yaml_char_t *start;
+        yaml_char_t* start;
         /** The end of the buffer. */
-        yaml_char_t *end;
+        yaml_char_t* end;
         /** The current position of the buffer. */
-        yaml_char_t *pointer;
+        yaml_char_t* pointer;
         /** The last filled position of the buffer. */
-        yaml_char_t *last;
+        yaml_char_t* last;
     } buffer;
 
     /** The raw buffer. */
     struct {
         /** The beginning of the buffer. */
-        unsigned char *start;
+        unsigned char* start;
         /** The end of the buffer. */
-        unsigned char *end;
+        unsigned char* end;
         /** The current position of the buffer. */
-        unsigned char *pointer;
+        unsigned char* pointer;
         /** The last filled position of the buffer. */
-        unsigned char *last;
+        unsigned char* last;
     } raw_buffer;
 
     /** The stream encoding. */
@@ -1629,11 +1619,11 @@ typedef struct yaml_emitter_s {
     /** The stack of states. */
     struct {
         /** The beginning of the stack. */
-        yaml_emitter_state_t *start;
+        yaml_emitter_state_t* start;
         /** The end of the stack. */
-        yaml_emitter_state_t *end;
+        yaml_emitter_state_t* end;
         /** The top of the stack. */
-        yaml_emitter_state_t *top;
+        yaml_emitter_state_t* top;
     } states;
 
     /** The current emitter state. */
@@ -1642,33 +1632,33 @@ typedef struct yaml_emitter_s {
     /** The event queue. */
     struct {
         /** The beginning of the event queue. */
-        yaml_event_t *start;
+        yaml_event_t* start;
         /** The end of the event queue. */
-        yaml_event_t *end;
+        yaml_event_t* end;
         /** The head of the event queue. */
-        yaml_event_t *head;
+        yaml_event_t* head;
         /** The tail of the event queue. */
-        yaml_event_t *tail;
+        yaml_event_t* tail;
     } events;
 
     /** The stack of indentation levels. */
     struct {
         /** The beginning of the stack. */
-        int *start;
+        int* start;
         /** The end of the stack. */
-        int *end;
+        int* end;
         /** The top of the stack. */
-        int *top;
+        int* top;
     } indents;
 
     /** The list of tag directives. */
     struct {
         /** The beginning of the list. */
-        yaml_tag_directive_t *start;
+        yaml_tag_directive_t* start;
         /** The end of the list. */
-        yaml_tag_directive_t *end;
+        yaml_tag_directive_t* end;
         /** The top of the list. */
-        yaml_tag_directive_t *top;
+        yaml_tag_directive_t* top;
     } tag_directives;
 
     /** The current indentation level. */
@@ -1692,7 +1682,8 @@ typedef struct yaml_emitter_s {
     int column;
     /** If the last character was a whitespace? */
     int whitespace;
-    /** If the last character was an indentation character (' ', '-', '?', ':')? */
+    /** If the last character was an indentation character (' ', '-', '?', ':')?
+     */
     int indention;
     /** If an explicit document end is required? */
     int open_ended;
@@ -1700,7 +1691,7 @@ typedef struct yaml_emitter_s {
     /** Anchor analysis. */
     struct {
         /** The anchor value. */
-        yaml_char_t *anchor;
+        yaml_char_t* anchor;
         /** The anchor length. */
         size_t anchor_length;
         /** Is it an alias? */
@@ -1710,11 +1701,11 @@ typedef struct yaml_emitter_s {
     /** Tag analysis. */
     struct {
         /** The tag handle. */
-        yaml_char_t *handle;
+        yaml_char_t* handle;
         /** The tag handle length. */
         size_t handle_length;
         /** The tag suffix. */
-        yaml_char_t *suffix;
+        yaml_char_t* suffix;
         /** The tag suffix length. */
         size_t suffix_length;
     } tag_data;
@@ -1722,7 +1713,7 @@ typedef struct yaml_emitter_s {
     /** Scalar analysis. */
     struct {
         /** The scalar value. */
-        yaml_char_t *value;
+        yaml_char_t* value;
         /** The scalar length. */
         size_t length;
         /** Does the scalar contain line breaks? */
@@ -1754,13 +1745,13 @@ typedef struct yaml_emitter_s {
     int closed;
 
     /** The information associated with the document nodes. */
-    yaml_anchors_t *anchors;
+    yaml_anchors_t* anchors;
 
     /** The last assigned anchor id. */
     int last_anchor_id;
 
     /** The currently emitted document. */
-    yaml_document_t *document;
+    yaml_document_t* document;
 
     /**
      * @}
@@ -1780,7 +1771,7 @@ typedef struct yaml_emitter_s {
  */
 
 YAML_DECLARE(int)
-yaml_emitter_initialize(yaml_emitter_t *emitter);
+yaml_emitter_initialize(yaml_emitter_t* emitter);
 
 /**
  * Destroy an emitter.
@@ -1789,7 +1780,7 @@ yaml_emitter_initialize(yaml_emitter_t *emitter);
  */
 
 YAML_DECLARE(void)
-yaml_emitter_delete(yaml_emitter_t *emitter);
+yaml_emitter_delete(yaml_emitter_t* emitter);
 
 /**
  * Set a string output.
@@ -1807,8 +1798,8 @@ yaml_emitter_delete(yaml_emitter_t *emitter);
  */
 
 YAML_DECLARE(void)
-yaml_emitter_set_output_string(yaml_emitter_t *emitter,
-        unsigned char *output, size_t size, size_t *size_written);
+yaml_emitter_set_output_string(yaml_emitter_t* emitter, unsigned char* output,
+                               size_t size, size_t* size_written);
 
 /**
  * Set a file output.
@@ -1821,7 +1812,7 @@ yaml_emitter_set_output_string(yaml_emitter_t *emitter,
  */
 
 YAML_DECLARE(void)
-yaml_emitter_set_output_file(yaml_emitter_t *emitter, FILE *file);
+yaml_emitter_set_output_file(yaml_emitter_t* emitter, FILE* file);
 
 /**
  * Set a generic output handler.
@@ -1833,8 +1824,8 @@ yaml_emitter_set_output_file(yaml_emitter_t *emitter, FILE *file);
  */
 
 YAML_DECLARE(void)
-yaml_emitter_set_output(yaml_emitter_t *emitter,
-        yaml_write_handler_t *handler, void *data);
+yaml_emitter_set_output(yaml_emitter_t* emitter, yaml_write_handler_t* handler,
+                        void* data);
 
 /**
  * Set the output encoding.
@@ -1844,7 +1835,7 @@ yaml_emitter_set_output(yaml_emitter_t *emitter,
  */
 
 YAML_DECLARE(void)
-yaml_emitter_set_encoding(yaml_emitter_t *emitter, yaml_encoding_t encoding);
+yaml_emitter_set_encoding(yaml_emitter_t* emitter, yaml_encoding_t encoding);
 
 /**
  * Set if the output should be in the "canonical" format as in the YAML
@@ -1855,7 +1846,7 @@ yaml_emitter_set_encoding(yaml_emitter_t *emitter, yaml_encoding_t encoding);
  */
 
 YAML_DECLARE(void)
-yaml_emitter_set_canonical(yaml_emitter_t *emitter, int canonical);
+yaml_emitter_set_canonical(yaml_emitter_t* emitter, int canonical);
 
 /**
  * Set the indentation increment.
@@ -1865,7 +1856,7 @@ yaml_emitter_set_canonical(yaml_emitter_t *emitter, int canonical);
  */
 
 YAML_DECLARE(void)
-yaml_emitter_set_indent(yaml_emitter_t *emitter, int indent);
+yaml_emitter_set_indent(yaml_emitter_t* emitter, int indent);
 
 /**
  * Set the preferred line width. @c -1 means unlimited.
@@ -1875,7 +1866,7 @@ yaml_emitter_set_indent(yaml_emitter_t *emitter, int indent);
  */
 
 YAML_DECLARE(void)
-yaml_emitter_set_width(yaml_emitter_t *emitter, int width);
+yaml_emitter_set_width(yaml_emitter_t* emitter, int width);
 
 /**
  * Set if unescaped non-ASCII characters are allowed.
@@ -1885,7 +1876,7 @@ yaml_emitter_set_width(yaml_emitter_t *emitter, int width);
  */
 
 YAML_DECLARE(void)
-yaml_emitter_set_unicode(yaml_emitter_t *emitter, int unicode);
+yaml_emitter_set_unicode(yaml_emitter_t* emitter, int unicode);
 
 /**
  * Set the preferred line break.
@@ -1895,7 +1886,7 @@ yaml_emitter_set_unicode(yaml_emitter_t *emitter, int unicode);
  */
 
 YAML_DECLARE(void)
-yaml_emitter_set_break(yaml_emitter_t *emitter, yaml_break_t line_break);
+yaml_emitter_set_break(yaml_emitter_t* emitter, yaml_break_t line_break);
 
 /**
  * Emit an event.
@@ -1912,7 +1903,7 @@ yaml_emitter_set_break(yaml_emitter_t *emitter, yaml_break_t line_break);
  */
 
 YAML_DECLARE(int)
-yaml_emitter_emit(yaml_emitter_t *emitter, yaml_event_t *event);
+yaml_emitter_emit(yaml_emitter_t* emitter, yaml_event_t* event);
 
 /**
  * Start a YAML stream.
@@ -1925,7 +1916,7 @@ yaml_emitter_emit(yaml_emitter_t *emitter, yaml_event_t *event);
  */
 
 YAML_DECLARE(int)
-yaml_emitter_open(yaml_emitter_t *emitter);
+yaml_emitter_open(yaml_emitter_t* emitter);
 
 /**
  * Finish a YAML stream.
@@ -1938,7 +1929,7 @@ yaml_emitter_open(yaml_emitter_t *emitter);
  */
 
 YAML_DECLARE(int)
-yaml_emitter_close(yaml_emitter_t *emitter);
+yaml_emitter_close(yaml_emitter_t* emitter);
 
 /**
  * Emit a YAML document.
@@ -1955,7 +1946,7 @@ yaml_emitter_close(yaml_emitter_t *emitter);
  */
 
 YAML_DECLARE(int)
-yaml_emitter_dump(yaml_emitter_t *emitter, yaml_document_t *document);
+yaml_emitter_dump(yaml_emitter_t* emitter, yaml_document_t* document);
 
 /**
  * Flush the accumulated characters to the output.
@@ -1966,7 +1957,7 @@ yaml_emitter_dump(yaml_emitter_t *emitter, yaml_document_t *document);
  */
 
 YAML_DECLARE(int)
-yaml_emitter_flush(yaml_emitter_t *emitter);
+yaml_emitter_flush(yaml_emitter_t* emitter);
 
 /** @} */
 
@@ -1975,4 +1966,3 @@ yaml_emitter_flush(yaml_emitter_t *emitter);
 #endif
 
 #endif /* #ifndef YAML_H */
-

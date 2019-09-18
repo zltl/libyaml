@@ -1,13 +1,12 @@
-#include <yaml.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <yaml.h>
 
-void print_escaped(yaml_char_t * str, size_t length);
+void print_escaped(yaml_char_t* str, size_t length);
 
-int main(int argc, char *argv[])
-{
-    FILE *input;
+int main(int argc, char* argv[]) {
+    FILE* input;
     yaml_parser_t parser;
     yaml_event_t event;
 
@@ -43,25 +42,20 @@ int main(int argc, char *argv[])
             printf("-STR\n");
         else if (type == YAML_DOCUMENT_START_EVENT) {
             printf("+DOC");
-            if (!event.data.document_start.implicit)
-                printf(" ---");
+            if (!event.data.document_start.implicit) printf(" ---");
             printf("\n");
-        }
-        else if (type == YAML_DOCUMENT_END_EVENT) {
+        } else if (type == YAML_DOCUMENT_END_EVENT) {
             printf("-DOC");
-            if (!event.data.document_end.implicit)
-                printf(" ...");
+            if (!event.data.document_end.implicit) printf(" ...");
             printf("\n");
-        }
-        else if (type == YAML_MAPPING_START_EVENT) {
+        } else if (type == YAML_MAPPING_START_EVENT) {
             printf("+MAP");
             if (event.data.mapping_start.anchor)
                 printf(" &%s", event.data.mapping_start.anchor);
             if (event.data.mapping_start.tag)
                 printf(" <%s>", event.data.mapping_start.tag);
             printf("\n");
-        }
-        else if (type == YAML_MAPPING_END_EVENT)
+        } else if (type == YAML_MAPPING_END_EVENT)
             printf("-MAP\n");
         else if (type == YAML_SEQUENCE_START_EVENT) {
             printf("+SEQ");
@@ -70,46 +64,42 @@ int main(int argc, char *argv[])
             if (event.data.sequence_start.tag)
                 printf(" <%s>", event.data.sequence_start.tag);
             printf("\n");
-        }
-        else if (type == YAML_SEQUENCE_END_EVENT)
+        } else if (type == YAML_SEQUENCE_END_EVENT)
             printf("-SEQ\n");
         else if (type == YAML_SCALAR_EVENT) {
             printf("=VAL");
             if (event.data.scalar.anchor)
                 printf(" &%s", event.data.scalar.anchor);
-            if (event.data.scalar.tag)
-                printf(" <%s>", event.data.scalar.tag);
+            if (event.data.scalar.tag) printf(" <%s>", event.data.scalar.tag);
             switch (event.data.scalar.style) {
-            case YAML_PLAIN_SCALAR_STYLE:
-                printf(" :");
-                break;
-            case YAML_SINGLE_QUOTED_SCALAR_STYLE:
-                printf(" '");
-                break;
-            case YAML_DOUBLE_QUOTED_SCALAR_STYLE:
-                printf(" \"");
-                break;
-            case YAML_LITERAL_SCALAR_STYLE:
-                printf(" |");
-                break;
-            case YAML_FOLDED_SCALAR_STYLE:
-                printf(" >");
-                break;
-            case YAML_ANY_SCALAR_STYLE:
-                abort();
+                case YAML_PLAIN_SCALAR_STYLE:
+                    printf(" :");
+                    break;
+                case YAML_SINGLE_QUOTED_SCALAR_STYLE:
+                    printf(" '");
+                    break;
+                case YAML_DOUBLE_QUOTED_SCALAR_STYLE:
+                    printf(" \"");
+                    break;
+                case YAML_LITERAL_SCALAR_STYLE:
+                    printf(" |");
+                    break;
+                case YAML_FOLDED_SCALAR_STYLE:
+                    printf(" >");
+                    break;
+                case YAML_ANY_SCALAR_STYLE:
+                    abort();
             }
             print_escaped(event.data.scalar.value, event.data.scalar.length);
             printf("\n");
-        }
-        else if (type == YAML_ALIAS_EVENT)
+        } else if (type == YAML_ALIAS_EVENT)
             printf("=ALI *%s\n", event.data.alias.anchor);
         else
             abort();
 
         yaml_event_delete(&event);
 
-        if (type == YAML_STREAM_END_EVENT)
-            break;
+        if (type == YAML_STREAM_END_EVENT) break;
     }
 
     assert(!fclose(input));
@@ -119,8 +109,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void print_escaped(yaml_char_t * str, size_t length)
-{
+void print_escaped(yaml_char_t* str, size_t length) {
     int i;
     char c;
 
