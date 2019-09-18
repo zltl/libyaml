@@ -12,6 +12,11 @@ set(YAML_STATIC_LIB_NAME
     "yaml"
     CACHE STRING "Base name of static library output")
 
+# This project can use C11, but will gracefully decay down to C89.
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED OFF)
+set(CMAKE_C_EXTENSIONS OFF)
+
 #
 # Build library
 #
