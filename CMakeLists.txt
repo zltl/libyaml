@@ -7,7 +7,8 @@ set(YAML_VERSION_PATCH 2)
 set(YAML_VERSION_STRING
     "${YAML_VERSION_MAJOR}.${YAML_VERSION_MINOR}.${YAML_VERSION_PATCH}")
 
-option(BUILD_SHARED_LIBS "Build libyaml as a shared library" OFF)
+option(YAML_BUILD_SHARED_LIBS "Build libyaml as a shared library" OFF)
+option(YAML_BUILD_TEST "Build libyaml as a shared library" ON)
 set(YAML_STATIC_LIB_NAME
     "yaml"
     CACHE STRING "Base name of static library output")
@@ -75,7 +76,7 @@ install(TARGETS yaml
 #
 # Add tests
 #
-include(CTest) # This module defines BUILD_TESTING option
-if(BUILD_TESTING)
+include(CTest)
+if(YAML_BUILD_TEST)
   add_subdirectory(tests)
 endif()
